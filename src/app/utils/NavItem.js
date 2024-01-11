@@ -56,7 +56,7 @@ const NavItem = ({ activeItem, isMobile }) => {
                            )
                         })}
                   </div>
-               )
+               
          </div>
                )
             }

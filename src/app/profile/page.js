@@ -5,6 +5,7 @@ import Heading from '../utils/Heading';
 import Header from '../../components/Header';
 import Profile from '../../components/Profile/Profile.js';
 import { useSelector } from 'react-redux';
+import Footer from '@/components/Footer';
 
 const page = () => {
     const [open, setOpen] = useState(false);
@@ -26,6 +27,7 @@ const page = () => {
         route={route}
         />
         <Profile user={user}/>
+        <Footer/>
     </Protected>
   )
 }

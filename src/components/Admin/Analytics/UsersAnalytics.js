@@ -5,8 +5,7 @@ import { useGetUsersAnalyticsQuery } from '../../../../redux/features/analytics/
 import Loader from '@/components/Loader/Loader'
 import { styles } from '@/app/styles/styles';
 
-const UsersAnalytics = () => {
-let isDashboard=false;
+const UsersAnalytics = ({isDashboard}) => {
     let {data,isLoading}=useGetUsersAnalyticsQuery({});
     // const analytics=[
     //     {name:"January 2023",count:4400},
@@ -26,7 +25,6 @@ let isDashboard=false;
     data && data?.users?.last12Months?.forEach((item)=>{
         return analytics.push({name:item.month,count:item.count})
      });
-     console.log(analytics);
   return (
     <div>
         {isLoading ? (<Loader/>):(

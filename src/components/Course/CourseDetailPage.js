@@ -9,8 +9,8 @@ import CourseDetail from './CourseDetail.js'
 import { useCreatePaymentIntentMutation, useGetStripePublishablekeyQuery } from '../../../redux/features/orders/ordersApi';
 import { loadStripe } from '@stripe/stripe-js';
 const CourseDetailPage = ({id}) => {
- const [route, setroute] = useState("Login");
- const [open, setOpen] = useState(false);
+ let [route, setroute] = useState("Login");
+ let [open, setOpen] = useState(false);
 
  let {data,isLoading}=useGetCourseDetailQuery(id);
 
@@ -23,7 +23,7 @@ const [stripePromise, setStripePromise] = useState(null);
  
  useEffect(()=>{
 if(config){
-  const publishableKey=config.publishableKey;
+  const publishableKey= config.publishableKey;
   
   loadStripe(publishableKey).then((resp)=>{setStripePromise(resp)});
 }
@@ -36,7 +36,7 @@ if(data){
  
  useEffect(()=>{
 if(paymentIntentData){
-  setClientSecret(paymentIntentData.client_secret);
+  setClientSecret(paymentIntentData && paymentIntentData?.client_secret);
 }
 },[paymentIntentData])
 
@@ -44,7 +44,7 @@ if(paymentIntentData){
   return (
   
   <div>
-    {isLoading ?(<Loader/>):(
+    {isLoading ? (<Loader/>):(
         <>
          <Heading title={data.course.name +" -ELearnig"} 
       description="ELearing is a platform fot student to learn and get help from teachers"
@@ -58,7 +58,10 @@ if(paymentIntentData){
         route={route}
         />
         
-        {stripePromise && <CourseDetail data={data.course} isDemo={true} stripePromise={stripePromise} clientSecret={clientSecret}/>}
+        {stripePromise && <CourseDetail data={data.course} isDemo={true} stripePromise={stripePromise} clientSecret={clientSecret}
+        setOpen={setOpen}
+        setroute={setroute}
+        />}
         <Footer/>
 
         </>

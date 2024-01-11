@@ -2,27 +2,50 @@ import { styles } from '@/app/styles/styles';
 import CouresPlayer from '@/app/utils/CouresPlayer';
 import Ratings from '@/app/utils/Ratings';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoCheckmarkDoneOutline, IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux'
 import { format } from 'timeago.js';
 import CourseContentList from '../Course/CourseContentList.js'
 import { Elements } from '@stripe/react-stripe-js';
 import CheckOutForm from '../../components/Payment/CheckOutForm.js'
-const CourseDetail = ({data,stripePromise,clientSecret}) => {
+import { useLoadUserQuery } from '../../../redux/features/api/apiSlice.js';
+import Image from 'next/image';
+import { VscVerifiedFilled } from 'react-icons/vsc';
+import Loader from '../Loader/Loader.js';
+const CourseDetail = ({data,stripePromise,clientSecret,setOpen:openAuthModal,setroute}) => {
+console.log({stripePromise,clientSecret});
 
-  const {user}=useSelector((state)=>state.auth);
+// let {data:userData,isLoading}=useLoadUserQuery(undefined,{});
+let userData=useSelector((state)=>state.auth)
+
+const [user, setUser] = useState("");
 const [open, setOpen] = useState(false);
 const discountPercentage = ((data?.estimatedPrice - data?.price)
 / data?.estimatedPrice)* 100
 const discountPercentagePrice = discountPercentage.toFixed(2);
-const isPurchased=user &&  user?.courses?.find((item)=>item._id===data._id);
+
+const isPurchased=user && user?.courses?.find((item)=>item._id===data._id);
+// let user=userData.user
+useEffect(()=>{
+  
+setUser(userData && userData?.user)
+},[userData])
 
 const handleOrder=()=>{
-  setOpen(true);
+  if(user){
+    setOpen(true);
+  }else{
+    setroute("Login");
+    openAuthModal(true);
+  }
+  
 }
 
 return (
+  <>
+  {/* {isLoading?<Loader/>: ( */}
+
     <div className=' w-[90%] 800px:w-[90%] m-auto py-5'>
       <div className=' w-full flex flex-col-reverse 800px:flex-row'>
 
@@ -86,14 +109,16 @@ return (
         <br />
         <br />
        
-        <div className=' w-full'>
-        <div className='800px:flex items-center'>
+        <div className=' !w-full '>
+        <div className='800px:flex w-full items-center '>
               <Ratings rating={data?.ratings}/>
               <div className='mb-2 800px:mb-[unset]'>
               <h1 className=' text-[25px] font-Poppins  text-black dark:text-white'>
                 {Number.isInteger(data?.ratings) ? data.ratings.toFixed(1) : data.ratings.toFixed(2) } {" "}
-                Course Rating * {data?.reviews} Reviews   
+                Course Rating *
+                 {data?.reviews.length} Reviews   
                 </h1>
+                </div>
               </div>
         <br />
         {(data?.reviews && [...data.reviews].reverse()).map((item,index)=>{
@@ -102,17 +127,19 @@ return (
               <div className=' flex'>
                 <div className=' w-[50px] h-[50px]'>
                   <div className=' w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer'>
-                    <h1 className=' uppercase text-[18px] text-black dark:text-white'>
-                      {item.user.name.slice(0,2)}</h1>
+                  <Image
+                        src={item?.user ? item?.user?.avatar?.url:avatar}
+                        width={50} height={50} alt='avatar' className=' rounded-full w-[50px] h-[50px] object-cover'
+                        />
                   </div>
                 </div>
-                <div className=' hidden 800px:block pl-2'>
+                <div className=' hidden 800px:block pl-2  '>
                   <div className=' flex items-center'>
-                    <h5 className=' text-[15px] pr-2 text-black dark:text-white'>
+                    <h5 className=' text-[20px] pr-2  text-black dark:text-white'>
                       {item.user.name}</h5>
                       <Ratings rating={item.ratings}/>
                   </div>
-                  <p className=' text-black dark:text-white '>{item.comment}</p>
+                  <p className=' text-black text-[20px] dark:text-white '>{item.comment}</p>
                   <small className=' text-[#000000d1] dark:text-[#ffffff83]'>
                     {format(item.createdAt)}
                   </small>
@@ -124,11 +151,38 @@ return (
                   <Ratings rating={item.ratings}/>
                 </div>
               </div>
+              <div className=''>
+              {item.commentReplies.map((item)=>{
+                        return (
+                       <div className=' 800px:pl-16 pl-16'>
+                        <div className='w-full flex mb-2'>
+                <div className=' w-[50px] h-[50px]'>
+                <Image 
+                src={
+                item?.user ?item.user?.avatar?.url:
+                avatar}
+                width={50} height={50} alt='avatar' className=' rounded-full w-[50px] h-[50px] border border-black dark:border-none object-cover'/>    
+                </div>
+                <div className=' pl-3'>
+                   <div className=' w-full flex'>
+                   <h1 className=' text-[20px] text-black dark:text-white'>
+                        {item && item?.user?.name}
+                    </h1> 
+                    {item.user.role==='admin' && <VscVerifiedFilled className=' !text-[#0095f6] ml-2 text-[20px]'/>}
+                   </div>
+                        <p className=' text-black dark:text-white'>{item.comment}</p>
+                        <small className=' dark:text-[#ffffff83] text-[#000000b8]'> 
+                        {format(item.createdAt)} *</small>
+                </div>
+               </div>
+                       </div> 
+                    )})}
+              </div>
             </div>
           )
         })
         }
-        </div>
+        
         </div>
         
         </div>
@@ -180,7 +234,7 @@ return (
             </div>
             <div className=" w-full">
               { stripePromise && clientSecret && <Elements stripe={stripePromise} options={{clientSecret}}>
-                <CheckOutForm setOpen={setOpen} data={data}/>
+                <CheckOutForm setOpen={setOpen} data={data} user={user}/>
                 </Elements>}
             </div>
           </div>
@@ -190,6 +244,9 @@ return (
 
     
     </div>
+  {/* )} */}
+  </>
+
   )
 }
 

@@ -14,12 +14,13 @@ const EditCourse = ({id}) => {
              let [editCourse,{isSuccess,error,isLoading}]=useEditCourseMutation()
              
 const editCourseData=data && data.courses.find((item)=>item._id===id);
-
+console.log(editCourseData);
     const [active, setactive] = useState(0);
     const [courseInfo, setCourseInfo] = useState({
         name:"",
         description:"",
         price:"",
+        categories:"",
         estimatedPrice:"",
         tags:"",
         level:"",
@@ -43,6 +44,7 @@ if(editCourseData){
   setCourseInfo({
     name:editCourseData.name,
     description:editCourseData.description,
+    categories:courseInfo.categories,
     price:editCourseData.price,
     estimatedPrice:editCourseData.estimatedPrice,
     tags:editCourseData.tags,
@@ -87,6 +89,7 @@ if(editCourseData){
                 description:courseInfo.description,
                 tags:courseInfo.tags,
                 price:courseInfo.price,
+                categories:courseInfo.categories,
                 estimatedPrice:courseInfo.estimatedPrice,
                 level:courseInfo.level,
                 thumbnail:courseInfo.thumbnail,
@@ -98,11 +101,12 @@ if(editCourseData){
             }
             setcourseData(data);
             
-            
+        
         }
 
     const handleCourseCreate=async()=>{
             const data=courseData;
+            console.log(data);   
             if(!isLoading){
             await editCourse({id:editCourseData._id,data});
           }

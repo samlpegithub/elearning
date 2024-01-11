@@ -46,9 +46,55 @@ export const courseApi=apiSlice.injectEndpoints({
                 method:"GET",
                 credentials:"include"
             })
-        })
+        }),
+        getCourseContent:builder.query({
+            query:(id)=>({
+                url:`get-course-content/${id}`,
+                method:"GET",
+                credentials:"include"
+            })
+        }),
+        addNewQuestion:builder.mutation({
+            query:({question,courseId,contentId})=>({
+                url:`add-question`,
+                method:"PUT",
+                body:{
+                    question,courseId,contentId
+                },
+                credentials:"include"
+            })
+        }),
+        addAnswerInQuestion:builder.mutation({
+            query:({answer,questionId,courseId,contentId})=>({
+                url:`add-answer`,
+                method:"PUT",
+                body:{
+                    answer,questionId,courseId,contentId
+                },
+                credentials:"include"
+            })
+        }),
+        addReviewInCourse:builder.mutation({
+            query:({courseId,review,rating})=>({
+                url:`add-review/${courseId}`,
+                method:"PUT",
+                body:{
+                    review,rating
+                },
+                credentials:"include"
+            })
+        }),
+        addReplyInReview:builder.mutation({
+            query:({comment,courseId,reviewId})=>({
+                url:`add-reply`,
+                method:"PUT",
+                body:{comment,courseId,reviewId},
+                credentials:"include"
+            })
+        }),
+      
     })
 })
 
 
-export const {useCreateCourseMutation,useGetAllCoursesQuery,useDeleteCourseMutation,useEditCourseMutation,useGetUserAllCoursesQuery,useGetCourseDetailQuery}=courseApi
+export const {useCreateCourseMutation,useGetAllCoursesQuery,useDeleteCourseMutation,useEditCourseMutation,useGetUserAllCoursesQuery,useGetCourseDetailQuery,useGetCourseContentQuery,useAddNewQuestionMutation,useAddAnswerInQuestionMutation,useAddReviewInCourseMutation,useAddReplyInReviewMutation}=courseApi

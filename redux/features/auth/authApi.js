@@ -70,7 +70,7 @@ export const authApi=apiSlice.injectEndpoints({
                 email,
                 avatar
             },
-            // credentials:'include'
+            credentials:'include'
 
         }),
    

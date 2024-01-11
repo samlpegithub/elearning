@@ -5,18 +5,23 @@ import { useCreateOrderMutation } from '../../../redux/features/orders/ordersApi
 import { styles } from '@/app/styles/styles';
 import { redirect } from 'next/navigation';
 import toast from 'react-hot-toast';
+import socketIO from 'socket.io-client'
 
-const CheckOutForm = ({data,setOpen}) => {
+const CheckOutForm = ({data,setOpen,user}) => {
   let stripe=useStripe();
 let elements=useElements();
 
 const [message, setMessage] = useState("")
-const [loadUser, setLoadUser] = useState("");
 const [isLoading, setisLoading] = useState(false);
+const [loadUser, setloadUser] = useState(false);
 
-let {refetch}=useLoadUserQuery({},{refetchOnMountOrArgChange:true});
+const ENDPOINT=process.env.NEXT_PUBLIC_SOCKET_URI
+const socketId=socketIO(ENDPOINT,{transports:['websocket']})
+
+let {refetch}=useLoadUserQuery({},{refetchOnMountOrArgChange:true})
 
 let [createOrder,{data:orderData,error}]=useCreateOrderMutation();
+
 
 
 const handleSubmit=async(e)=>{
@@ -35,7 +40,6 @@ const handleSubmit=async(e)=>{
   }else if(paymentIntent && paymentIntent.status==='succeeded'){
     setisLoading(false);
     
-    console.log(paymentIntent,35);
     await createOrder({
       courseId:data._id,
       payment_info:paymentIntent
@@ -43,16 +47,21 @@ const handleSubmit=async(e)=>{
   }
 }
 useEffect(()=>{
-if(orderData){
-  setOpen(false);
-  refetch();
-  console.log(orderData);
-  redirect(`course-access/${data._id}`);
-}
-if(error){
-  toast.success(error.message);
-}
-},[orderData,error])
+  if(orderData){
+    setOpen(false);
+    refetch();
+
+    socketId.emit('notification',{
+      title:"New Order",
+      message:`you have a new order from ${data?.name}`,
+      userId:user._id
+    })
+    redirect(`/course-access/${data._id}`);
+  }
+  if(error){
+    toast.success(error.message);
+  }
+  },[orderData,error])
 
   return (
     <form onSubmit={handleSubmit} id='payment-form'>

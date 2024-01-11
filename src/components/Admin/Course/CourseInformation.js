@@ -110,10 +110,10 @@ console.log(data);
      
       <div className='w-[45%]'>
       <label htmlFor="" className={`${styles.label}`}>Course Categories </label>
-      <select name="" id="" onChange={(e)=>setCourseInfo({...courseInfo,category:e.target.value})}  className={`${styles.input} cursor-pointer dark:bg-slate-900 dark:text-white`}>
+      <select name="" value={courseInfo.categories} id="" onChange={(e)=>setCourseInfo({...courseInfo,categories:e.target.value})}  className={`${styles.input} cursor-pointer dark:bg-slate-900 dark:text-white`}>
       <option value="">Select Category</option>
       {categories.map((item,index)=>{
-      return (<option key={index} value={item._id}>{item.title}</option>)
+      return (<option key={index} value={item.title}>{item.title}</option>)
       })}
       </select>
       </div>

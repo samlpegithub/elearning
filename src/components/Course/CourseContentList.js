@@ -38,7 +38,7 @@ const CourseContentList = ({data,isDemo,activeVideo,setActiveVideo}) => {
               const sectionContentHours=sectionVideoLength/60;
 
             return (
-                <div className={`${isDemo && " border-b border-[#ffffff8e]"} pb-2`} key={section}>
+                <div className={`${isDemo && " border-b border-[#ffffff8e]"} ${!isDemo && "border-b dark:border-[#ffffff8e] border-black"}  pb-2`} key={section}>
                     <div className=' w-full flex'>
                         {/* Render video Section  */}
                         <div className=' w-full flex justify-between items-center '>

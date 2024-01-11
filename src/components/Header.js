@@ -20,10 +20,11 @@ const Header = ({ open, setOpen, activeItem, route, setroute }) => {
     const [openSider, setopenSider] = useState(false);
     const [logout, setlogout] = useState(false);
     let [socialAuth, { isSuccess, error }] = useSocialAuthMutation()
-    const {}=useLogOutQuery(undefined,{skip:!logout? true:false});
+
     const { user } = useSelector((state) => state.auth);
     let { data } = useSession();
-
+    
+    const {}=useLogOutQuery(undefined,{skip: !logout ? true : false});
 
     if (typeof window!=='undefined') {
         window.addEventListener('scroll',()=>{
@@ -53,9 +54,8 @@ useEffect(() => {
                     toast.success("Login Successfully");
                 }
             }
-            if(data===null){
+            if(data===null ){
                 setlogout(true);
-
             }
         }
     }, [user, data, isSuccess])
@@ -67,7 +67,7 @@ useEffect(() => {
     }
     return (
         <div className=' w-full relative'>
-            <div className={`${ active ? "dark:bg-opacity-50  dark:bg-gradient-to-b dark:from-gray-900   dark:to-black fixed left-0 top-0   h-[80px] z-[80] shadow-xl border-b dark:border-[#ffffff1c]  transition duration-500 w-full dark:bg-black"
+            <div className={`${ active ? " !dark:bg-opacity-50  dark:bg-gradient-to-b dark:from-gray-900   dark:to-black !bg-white !bg-opacity-100 fixed left-0 top-0   h-[80px] z-[80] shadow-xl border-b dark:border-[#ffffff1c]  transition duration-500 w-full dark:bg-black"
                 : "w-full border-b  dark:bg-gradient-to-b from-gray-900  to-black dark:border-[#ffffff1c] h[80px] z-[80] dark:shadow"} `}>
                 <div className='w-[95%] 800px:w-[97%] mt-auto h-full '>
                     <div className=' w-full h-[80px] flex items-center justify-between p-3'>

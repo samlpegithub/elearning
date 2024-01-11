@@ -1,9 +1,21 @@
-import React from 'react'
+'use client'
+import React,{useState} from 'react'
 import DashboardHeader from './DashboardHeader'
-const DashboardHero = () => {
+import DashboardWidgets from './Widgets/DashboardWidgets.js';
+
+const DashboardHero = ({isDashboard}) => {
+  const [open, setopen] = useState(false);
+  
   return (
     <div>
-        <DashboardHeader/>
+        <DashboardHeader open={open} setopen={setopen}/>
+        {isDashboard && (
+          <>
+          <DashboardWidgets open={open}/>
+          
+          </>
+        )}
+
     </div>
   )
 }

@@ -102,7 +102,6 @@ return (
             <Box 
             display={'flex'}
             justifyContent={'end'}
-            // alignItems={'center'}
             mt={0}
             ml={'30px'}
             >

@@ -14,7 +14,7 @@ const CourseCard = ({item,isProfile}) => {
             objectFit='contain'
             />
             <br />
-            <h1 className='font-Poppins text-[16px] text-black dark:text-white'>{item?.name}</h1>
+            <h1 className='font-Poppins text-[16px] text-black dark:text-white'>{item?.name.slice(0,40)} ...</h1>
             <div className=' w-full flex items-center justify-between pt-2'>
                 <Ratings rating={item.ratings}/>
                 <h5 className={` text-black dark:text-white ${isProfile && "hidden 800px:inline"}`}>

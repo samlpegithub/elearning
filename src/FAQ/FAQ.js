@@ -23,7 +23,7 @@ const toggleQuestion=(id)=>{
       return  q._id===id?{...q,active:!q.active}:q}) })
 }
   return (
-      <div className='w-full 800px:w-[80%] min-h-screen  800px:pl-20 m-auto mt-[50px]  '>
+      <div className='w-[90%] 800px:w-[80%] min-h-screen  m-auto mt-[50px]  '>
         <h1 className={styles.title}>
             Frequently Asked Questions
         </h1>

@@ -14,7 +14,7 @@ const Ratings = (props) => {
         
     }
     else{
-        stars.push(<AiOutlineStar key={i} size={20} color='#f6b00' className=' mr-2 cursor-pointer'/>)
+        stars.push(<AiOutlineStar key={i} size={20}  className='text-[#f6b00] dark:text-white mr-2 cursor-pointer'/>)
 
     }
     }

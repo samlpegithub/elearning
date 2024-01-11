@@ -12,7 +12,6 @@ let analytics=[];
 data && data?.orders?.last12Months?.forEach((item)=>{
   return analytics.push({name:item.month,count:item.count});
 });
-console.log(data);
 
     return (
     <div>

@@ -16,7 +16,7 @@ const CreateCourse = () => {
     const [courseInfo, setCourseInfo] = useState({
         name:"",
         description:"",
-        category:"",
+        categories:"",
         price:"",
         estimatedPrice:"",
         tags:"",
@@ -61,6 +61,7 @@ const CreateCourse = () => {
             const data={
                 name:courseInfo.name,
                 description:courseInfo.description,
+                categories:courseInfo.categories,
                 tags:courseInfo.tags,
                 price:courseInfo.price,
                 estimatedPrice:courseInfo.estimatedPrice,
